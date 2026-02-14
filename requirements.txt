@@ -1,0 +1,14 @@
+streamlit
+pandas
+numpy
+altair
+python-dotenv
+google-generativeai
+qdrant-client
+scikit-learn
+openai
+flask
+fastapi
+uvicorn
+requests
+pytest
