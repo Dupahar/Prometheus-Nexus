@@ -1,9 +1,8 @@
-# Ignore everything by default
-*
+# Ignore everything in root
+/*
 
 # Whitelist Prometheus-Nexus Project Files
 !/prometheus_robotics/
-!/prometheus_robotics/**
 !/dashboard.py
 !/Dockerfile
 !/docker-compose.yml
@@ -12,7 +11,7 @@
 !/check_genai.py
 !/.gitignore
 
-# Explicitly ignore secrets and temporary files (redundant but safe)
+# Explicitly ignore keys/envs if they somehow get included
 .env
 .venv/
 __pycache__/
