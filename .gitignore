@@ -10,6 +10,8 @@
 !/README.md
 !/check_genai.py
 !/.gitignore
+!/scripts/
+!/DEPLOYMENT_GUIDE.md
 
 # Explicitly ignore keys/envs if they somehow get included
 .env
