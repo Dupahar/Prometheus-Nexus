@@ -19,7 +19,30 @@ class GeminiClient:
         if self.api_key:
             genai.configure(api_key=self.api_key)
         
-        self.model_name = "gemini-1.5-flash" 
+        self.model_name = self._select_working_model()
+        logger.info(f"Selected Gemini Model: {self.model_name}")
+
+    def _select_working_model(self) -> str:
+        """Try to find a working model from a prioritized list."""
+        candidates = [
+            "gemini-2.0-flash-exp",
+            "gemini-1.5-flash",
+            "gemini-1.5-flash-latest",
+            "gemini-1.5-pro",
+            "gemini-1.5-pro-latest",
+            "gemini-pro"
+        ]
+        try:
+            available_models = [m.name.replace("models/", "") for m in genai.list_models()]
+            for candidate in candidates:
+                if candidate in available_models:
+                    return candidate
+            # If no exact match, return first available gen model
+            for m in available_models:
+                if "gemini" in m: return m
+        except Exception:
+            pass # Fallback if list_models fails
+        return "gemini-1.5-flash" # Default fallback
 
     def generate_content(self, prompt: str, system_instruction: Optional[str] = None) -> str:
         try:
@@ -31,7 +54,8 @@ class GeminiClient:
             return response.text
         except Exception as e:
             logger.error(f"Gemini generation error: {e}")
-            return f"Error: {e}"
+            # Return a fallback action to prevent crash loops in simulation
+            return "WAIT" if "plan_robot_action" in str(e) else f"Error: {e}"
 
     def assign_tasks(self, robots: dict, goals: list) -> dict:
         """
